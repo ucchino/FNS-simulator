@@ -1,0 +1,7 @@
+Through this folder the user will be able to reproduce the Dynamical Relaying mechanism, as described in the paper of Vicente et al., 2008: "Dynamical relaying can yield zero time lag neuronal synchrony despite long conduction delays". In order to obtain the .CSVs of the model activity (firing.CSV and burning.CSV) in the folder FNS/.../dynamical_relaying/output, the following "experiment command" can be used:
+
+.\start.bat dynamical_relaying (Windows)
+
+or
+
+$ ./start dynamical_relaying (Linux)

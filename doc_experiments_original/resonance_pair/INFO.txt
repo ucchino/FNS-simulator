@@ -1,0 +1,9 @@
+Through this folder the user will be able to reproduce the Resonance Pair mechanism, as described in the following paper:
+
+Maslennikov and Nekorkin, 2014. Modular networks with delayed coupling: Synchronization and frequency control. Phys. Rev. E 90.
+Gollo, L. et al., 2014. Mechanisms of zero-lag synchronization in cortical motifs. PLOS computational biology 10 (4), 1–17) In order to obtain the .CSVs of the model activity (firing.CSV and burning.CSV) in the folder FNS/.../resonance_pair/output, the following "experiment command" can be used:
+.\start.bat resonance_pair (Windows)
+
+or
+
+$ ./start resonance_pair (Linux)

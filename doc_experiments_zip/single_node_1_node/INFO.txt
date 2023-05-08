@@ -1,0 +1,7 @@
+Through this folder the user will be able to reproduce the activity within a single node of 100 LIFL neurons (80 exc. and 20 inh.) connected in a small-world fashion. In order to obtain the .CSVs of the model activity (firing.CSV and burning.CSV) in the folder FNS/.../single_node/output, the following "experiment command" can be used:
+
+.\start.bat single_node (Windows)
+
+or
+
+$ ./start single_node (Linux)

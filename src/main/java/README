@@ -1,0 +1,126 @@
+"FNS" (Firnet NeuroScience)
+
+FNS is an event-driven Spiking Neural Network framework, oriented to data-driven neural simulations.
+
+(c) 2020, Gianluca Susi, Emanuele Paracone, Mario Salerno, Alessandro Cristini, Fernando Maestú.
+
+CITATION: When using FNS for scientific publications, cite us as follows:
+
+Gianluca Susi, Pilar Garcés, Alessandro Cristini, Emanuele Paracone,Mario Salerno, Fernando Maestú, Ernesto Pereda (2020).
+
+"FNS: an event-driven spiking neural network simulator based on the LIFL neuron model".
+
+Laboratory of Cognitive and Computational Neuroscience, UPM-UCM Centre for Biomedical Technology, Technical University of Madrid; University of Rome "Tor Vergata". 
+
+Paper under review.
+
+FNS is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3 as published by the Free Software Foundation.
+
+FNS is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with FNS.
+
+If not, see <http://www.gnu.org/licenses/>
+
+-----------------------------------------------------------
+
+Website: http://www.fnsneuralsimulator.org
+
+Contacts: 
+    fnsneuralsimulator (at) gmail.com 
+    gianluca.susi82    (at) gmail.com
+    emanuele.paracone  (at) gmail.com
+
+-----------------------------------------------------------
+
+Other contributors:
+    ucchino (at) gmail.com (Ignite/Gridgain, AWS support)
+
+First of all we define how the neural network is simulated.
+
+It all starts with loading the network configuration from the appropriate folder
+(please refer to the StartMain class)
+
+A network is made up of N nodes and each node is associated with a thread. 
+Practically the thread collects the incoming data, processes it, and sends it to 
+the connected nodes (i.e. the other running jobs) the processing results.
+
+Thanks to Ignite (https://ignite.apache.org/) the communication management between
+threads is transparent. And each thread may reside on any machine on the network 
+and not just locally.
+
+-----------------------------------------------------------
+
+The program can therefore work in two ways, all locally or on the network.
+
+Local operation is the simplest (refer to the StartMain class)
+
+To start network operation, one or more "worker" nodes must be started
+(please refer to the StartWorker class) in addition to the "main".
+
+So with 3 pc i have to start 2 workers on remote nodes and 1 main on master node,
+the node where the network configuration files reside.
+
+Each worker is waiting to execute one or more threads. 
+Thread balancing from running from each worker is transparent and balanced directly 
+by Ignite. If there are 3 pc and 13 nodes I get a balance with 4 threads for 2 
+nodes and 5  threads for the third.
+
+All transparently.
+
+Once the worker has started, it waits for the thread to execute.
+
+As soon as the main node starts and finishes building the network in memory it
+starts the threads remote to satisfy the need for active nodes for the simulation.
+
+The StartStatus class, on the other hand, has the purpose of giving an idea of
+the status of the nodes of the net.
+
+That is how many and which ones are active. Of course, it only makes sense in
+the case of active workers.
+
+PLEASE NOTE:
+
+1 - Each node has its own cache. This approach was made to avoid having to loop 
+through the events looking for an event of the current node. 
+If an event is in a given cache then it is processed by the node referencing 
+one specific cache, thus knowing that inside there are incoming events that concern it.
+
+2 - CUSTOMIZE_EXPERIMENTAL_THREAD_MANUAL_MANAGE is EXPERIMENTAL! 
+It is used to oblige Ignite not to use backups or replicas. Let me explain.
+When a value is saved in a cache this is replicated on a number (by default 3) 
+of nodes to ensure that even if one node falls in any case the value is readable.
+In case we are the cache I want it to be always local to the node and has no 
+replicas because they are not needed. But I still have to work on it
+
+-----------------------------------------------------------
+
+In the case of a network simulation there are therefore two operating modes:
+1 - Local network (already discussed)
+2 - Cloud on AWS via Terraform.
+
+In the case of AWS, refer to the files in the terraform folder:
+- terraform main script: aws_fns.tf
+- management bat file: see in particular the create
+
+The terraform create file creates a network based on its own resources.
+From the command line create the instances you want to use eg:
+terraform_2_create.bat 4 (create 4 instances based on aws_fns.tf)
+
+In the case of AWS it is highly recommended NOT TO USE JCLOUDS, it seems unreliable.
+For now we always use S3 for remote discovery of the VPCs for running the simulation.
+
+PLEASE NOTE:
+
+Refer to the ConstantsGrid file for customizing the thread pool size.
+1 - For now there is a limit of 64 nodes on the network (CUSTOMIZE_POOL_SIZE_MAX_NODES)
+2 - There is a limit to which certain sort operations are performed via sql query or via sort
+     in java: CUSTOMIZE_CLIENTSIDE_SORTING_LIMIT. Beyond this limit sql support is used
+provided by Ignite.
+
+AWS management is complex to ensure maximum speed, uses :
+    EC2: whose number is chosen by the user.
+    S3: Discovery of Ignite nodes and save simulation log
+    KinesisFirehose: for fast streaming of data from each node into a single S3 log

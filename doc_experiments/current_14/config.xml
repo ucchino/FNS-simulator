@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<fns_config>
+   <stop>1000</stop><!-- simulation time (ms) -->
+   <lif>false</lif>
+   <exp_decay>true</exp_decay>
+
+   <glob_n>4000</glob_n><!-- number of neurons for each node -->
+   <glob_rewiring_P>1</glob_rewiring_P><!-- SW rewiring probability-->
+   <glob_k>80</glob_k><!-- SW mean degree -->
+   <glob_R>0.8</glob_R><!-- ratio between excitatory and total neuron number-->
+   <glob_Bn>0</glob_Bn><!-- burst cardinality factor -->
+   <glob_IBI>0</glob_IBI><!-- inter-burst interval -->
+   <glob_mu_w_exc>1</glob_mu_w_exc><!-- post-synaptic excitatory weight -->
+   <glob_mu_w_inh>1</glob_mu_w_inh><!-- post-synaptic inhibitort weight  -->
+   <glob_sigma_w_exc>0.0</glob_sigma_w_exc>
+   <glob_sigma_w_inh>0.0</glob_sigma_w_inh>
+   <glob_w_pre_exc>0.025</glob_w_pre_exc><!-- pre-synaptic excitatory amplitude-->
+   <glob_w_pre_inh>0.225</glob_w_pre_inh><!-- pre-synaptic inhibitory amplitude-->
+   <glob_external_inputs_number>4000</glob_external_inputs_number><!-- number of external inputs -->
+   <glob_external_inputs_outdegree>10</glob_external_inputs_outdegree><!-- number of targets of each external input-->
+   <glob_external_inputs_type>0</glob_external_inputs_type><!-- type of external input:0) Poisson, 1) constant, 2) noise -->
+   <glob_external_inputs_time_offset>0</glob_external_inputs_time_offset><!-- external input initial time offset -->
+   <glob_external_inputs_timestep>200</glob_external_inputs_timestep><!-- time step between two distinct input events from the same input source, for Poisson and constant input type -->
+   <glob_external_inputs_fireduration>1000</glob_external_inputs_fireduration><!-- duration of the external input -->
+   <glob_external_inputs_amplitude>0.632</glob_external_inputs_amplitude><!-- amplitude of each external input -->
+   <avg_neuronal_signal_speed>5.1</avg_neuronal_signal_speed><!-- axonal speed -->
+   <glob_plasticity>false</glob_plasticity><!-- enable plasticity rule -->
+   <glob_plasticity_eta_plus></glob_plasticity_eta_plus>
+   <glob_plasticity_eta_minus></glob_plasticity_eta_minus>
+   <glob_plasticity_tau_plus></glob_plasticity_tau_plus>
+   <glob_plasticity_tau_minus></glob_plasticity_tau_minus>
+   <glob_plasticity_to></glob_plasticity_to>
+   <glob_w_max></glob_w_max>
+   <global_neuron_manager><!-- neuron parameters -->
+      <D_exc>20</D_exc><!-- underthreshold decay constant of each exc neuron -->
+      <D_inh>20</D_inh><!-- underthreshold decay constant of each inh neuron -->
+      <c>0.04</c><!-- threshold constant -->
+      <t_arp>5</t_arp><!-- refractory period of each neuron (ms) -->
+      <a>1</a>
+      <b>0</b>
+   </global_neuron_manager>
+</fns_config>
